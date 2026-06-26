@@ -1,0 +1,16 @@
+[Unit]
+Description=Sentinel Ingestion Daemon
+After=default.target
+
+[Service]
+Type=simple
+ExecStart=/home/user/sentinel/.venv/bin/python -m sentinel.ingest.daemon --config /home/user/sentinel/config.yaml
+WorkingDirectory=/home/user/sentinel
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=sentinel-ingest
+
+[Install]
+WantedBy=default.target

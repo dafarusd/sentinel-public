@@ -1,0 +1,23 @@
+[Unit]
+Description=Sentinel 433 MHz Capture Daemon (rtl_433)
+After=network.target sentinel-ingest.service
+Wants=sentinel-ingest.service
+
+[Service]
+Type=simple
+ExecStart=/home/user/sentinel/.venv/bin/python -m sentinel.capture.sdr_433 --config /home/user/sentinel/config.yaml
+WorkingDirectory=/home/user/sentinel
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=sentinel-sdr-433
+
+# Security hardening (mirrors sentinel-wifi.service)
+NoNewPrivileges=no
+ProtectSystem=strict
+ReadWritePaths=/home/user/sentinel/data
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,23 @@
+[Unit]
+Description=Sentinel Bluetooth Capture Daemon
+After=bluetooth.target
+Wants=sentinel-ingest.service
+
+[Service]
+Type=simple
+ExecStart=/home/user/sentinel/.venv/bin/python -m sentinel.capture.bluetooth --config /home/user/sentinel/config.yaml
+WorkingDirectory=/home/user/sentinel
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=sentinel-bt
+
+# Security hardening
+NoNewPrivileges=no
+ProtectSystem=strict
+ReadWritePaths=/home/user/sentinel/data
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

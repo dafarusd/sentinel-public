@@ -1,0 +1,10 @@
+[Unit]
+Description=Sentinel Profiler (one-shot)
+
+[Service]
+Type=oneshot
+ExecStart=/home/user/sentinel/.venv/bin/python -m sentinel.profiler.engine --config /home/user/sentinel/config.yaml
+WorkingDirectory=/home/user/sentinel
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=sentinel-profiler
