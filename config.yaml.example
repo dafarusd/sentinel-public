@@ -1,0 +1,111 @@
+# Sentinel configuration — template
+#
+# Copy this file to config.yaml and edit for your environment.
+# config.yaml is gitignored; this template is the source of truth in the repo.
+#
+# All paths are relative to install_dir unless absolute.
+
+# install_dir defaults to current working directory (".") so a fresh clone
+# runs from anywhere. Override with an absolute path for systemd-managed
+# deploys. Production example:
+#   install_dir: /home/user/sentinel
+install_dir: .
+
+# data_dir is a forward-compatibility placeholder. No code currently reads it.
+data_dir: data
+
+# Default paths put runtime data inside the repo's data/ directory so a fresh
+# clone works without external storage. For long-running deploys, point these
+# at dedicated storage (the Pi production deploy uses an external SSD):
+#   db_path:  /mnt/ssd/sentinel-data/sentinel.db
+#   log_dir:  /mnt/ssd/sentinel-data/logs
+#   oui_path: /mnt/ssd/sentinel-data/oui.txt
+db_path: data/sentinel.db
+log_dir: data/logs
+oui_path: data/oui.txt
+
+# socket_path stays relative — ephemeral, recreated at runtime.
+socket_path: data/sentinel.sock
+
+# GPS static fallback (used when GPS hat is not connected)
+static_location:
+  latitude: 0.0
+  longitude: 0.0
+  altitude: 0.0
+  label: "default"
+
+# Learning mode: system observes without anomaly scoring for this many days after first run
+learning_period_days: 7
+
+# ---- Capture: WiFi ----
+wifi:
+  enabled: true
+  interface: wlan1          # monitor-mode capable interface (Alfa AWUS036ACH)
+  channels_24ghz: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+  channels_5ghz: [36, 40, 44, 48, 52, 56, 60, 64, 100, 104, 108, 112, 116, 120, 124, 128, 132, 136, 140, 144, 149, 153, 157, 161, 165]
+  channel_dwell_ms: 250     # time on each channel before hopping
+  hop_enabled: true
+
+# ---- Capture: Bluetooth ----
+bluetooth:
+  enabled: true
+  adapter: hci0             # Pi 5 built-in BT 5.0
+  ble_scan_duration_s: 10   # BLE scan window
+  classic_inquiry_duration_s: 8
+  classic_inquiry_interval_s: 60
+
+# ---- Capture: SDR ----
+# Both ADS-B and rtl_433 subsystems default to disabled. Operator flips the
+# relevant flag in their local config.yaml after physical setup (antenna,
+# readsb stopped if switching to 433, etc.). Single SDR, single tunable
+# frequency — adsb_enabled and rtl433_enabled are mutually exclusive in
+# practice.
+sdr:
+  enabled: false
+  device_index: 0
+  sample_rate: 2400000
+  center_freq: 433920000    # 433 MHz ISM band default
+  gain: 40
+  adsb_enabled: false               # flip to true to start ADS-B capture
+  adsb_readsb_host: 127.0.0.1       # readsb runs locally alongside Sentinel
+  adsb_readsb_port: 30003           # readsb SBS-1 BaseStation output
+  adsb_reconnect_backoff_s: 2       # base delay, doubles to 60s cap on repeat failures
+  rtl433_enabled: false             # flip to true to start 433 MHz capture
+
+# ---- Capture: GPS/LoRa (deferred) ----
+gps:
+  enabled: false
+  serial_port: /dev/ttyS0
+  baud_rate: 9600
+
+lora:
+  enabled: false
+  serial_port: /dev/ttyS0
+  frequency: 915000000      # 915 MHz US ISM
+
+# ---- Ingestion ----
+ingest:
+  batch_interval_s: 2.0
+  batch_max_events: 500
+  dedup_window_s: 1.0       # events with same (mac, channel) within this window are deduped
+
+# ---- Profiler ----
+profiler:
+  interval_min: 15
+  companion_window_s: 60    # co-presence window for companion device detection
+  min_observations: 10      # minimum observations before building a profile
+
+# ---- Detection thresholds (hot-reloadable via SIGHUP) ----
+detection:
+  temporal_stddev: 3.0      # stddev threshold for time-of-day anomaly
+  location_stddev: 2.0      # stddev threshold for RSSI anomaly (vs p95)
+  behavioral_probe_rate_multiplier: 3.0  # probe rate N times historical mean
+  absence_presence_pct: 95.0  # device must have this presence rate to trigger absence
+  absence_hours: 4.0        # hours absent before alerting
+  probe_cluster_jaccard: 0.6  # Jaccard similarity threshold for SSID-set clustering
+
+# ---- Logging ----
+logging:
+  level: INFO               # DEBUG, INFO, WARNING, ERROR
+  max_bytes: 10485760       # 10 MB per log file
+  backup_count: 5           # number of rotated files to keep

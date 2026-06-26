@@ -1,0 +1,17 @@
+[Unit]
+Description=Sentinel Detection Daemon
+After=sentinel-ingest.service
+Wants=sentinel-ingest.service
+
+[Service]
+Type=simple
+ExecStart=/home/user/sentinel/.venv/bin/python -m sentinel.detector.engine --config /home/user/sentinel/config.yaml
+WorkingDirectory=/home/user/sentinel
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=sentinel-detector
+
+[Install]
+WantedBy=default.target

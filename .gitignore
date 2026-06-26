@@ -1,0 +1,34 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+data/sentinel.db
+data/sentinel.db-wal
+data/sentinel.db-shm
+data/logs/*.log
+data/logs/*.log.*
+*.swp
+*.swo
+*~
+.env
+.claude/
+STAGE_*_INTENT.md
+data/test/
+
+# Backup files from sed-based deployment patches
+*.bak
+*.pre-stage*
+*.pre-fix-bak
+
+# IEEE OUI database — reference data, fetched separately
+data/oui.txt
+
+# Operator-tuned, machine-local
+config.yaml

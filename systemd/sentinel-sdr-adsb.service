@@ -1,0 +1,17 @@
+[Unit]
+Description=Sentinel ADS-B Capture Daemon
+After=sentinel-ingest.service
+Wants=sentinel-ingest.service
+
+[Service]
+Type=simple
+ExecStart=/home/user/sentinel/.venv/bin/python -m sentinel.capture.adsb --config /home/user/sentinel/config.yaml
+WorkingDirectory=/home/user/sentinel
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=sentinel-sdr-adsb
+
+[Install]
+WantedBy=default.target
