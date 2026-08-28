@@ -271,3 +271,7 @@ This project is released under the terms in [`LICENSE`](LICENSE).
 ## Disclaimer
 
 Sentinel is provided for lawful research and education on infrastructure you own or are authorized to monitor. It is offered **as-is, without warranty of any kind**. The author accepts no liability for misuse or for any consequences of using this software. By using Sentinel you accept full responsibility for operating it lawfully and ethically in your jurisdiction. **If in doubt, don't capture.**
+
+---
+
+Built by Dafarus — [@Dafarusd on X](https://x.com/Dafarusd)
