@@ -1,0 +1,42 @@
+Sentinel — passive RF and network sensing on a Raspberry Pi 5
+Copyright (c) 2026 Dafarus (dafarusd). All rights reserved.
+
+============================================================
+LICENSE
+============================================================
+
+This project is licensed under the GNU Affero General Public License v3.0
+(AGPL-3.0-only). See the LICENSE file for the full text.
+
+The AGPL requires that anyone who runs a modified version of this software
+to provide a network service must make their complete corresponding source
+available to the users of that service.
+
+============================================================
+DUAL LICENSING / COMMERCIAL USE
+============================================================
+
+Dafarus is the sole copyright holder of the original code in this
+repository and reserves all rights not granted by the AGPL-3.0.
+
+If the AGPL-3.0's copyleft terms do not suit your use — for example, you
+want to incorporate this code into a proprietary or closed-source product,
+or offer it as a hosted service without releasing your own source — a
+commercial license is available. Contact the copyright holder via
+https://x.com/Dafarusd
+
+============================================================
+THIRD-PARTY DEPENDENCIES
+============================================================
+
+Sentinel depends on external packages declared in pyproject.toml. Those
+carry their own licenses and are not covered by this NOTICE. No third-party
+code is vendored into this repository.
+
+============================================================
+USE
+============================================================
+
+Sentinel is for lawful research and education on infrastructure you own or
+are authorized to monitor. It is provided as-is, without warranty of any
+kind. See the Disclaimer in README.md.

@@ -264,7 +264,9 @@ See `ROADMAP_V2.md` for the detailed plan. The general direction is from raw cap
 
 This project is released under the terms in [`LICENSE`](LICENSE).
 
-> **No license file is included yet — add one before relying on others to reuse this code.** Without a license, default copyright applies and others have no legal right to use, modify, or distribute it. Common choices: **MIT** or **Apache-2.0** for permissive reuse, **GPL-3.0** if you want derivatives kept open. Apache-2.0 additionally provides an explicit patent grant, which some prefer for security tooling.
+Licensed under the **GNU Affero General Public License v3.0** (AGPL-3.0-only). See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+
+Anyone who runs a modified Sentinel as a network service must make their corresponding source available to that service's users. A commercial license is available for proprietary or closed-source use that the AGPL's copyleft does not permit — see NOTICE.
 
 ---
 
