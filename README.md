@@ -120,10 +120,11 @@ A key honest finding from development: naive statistical co-presence clustering 
 - A Wi-Fi adapter that **supports monitor mode** for management-frame capture.
 
 **Software**
-- A recent Linux distribution
-- Python (version per `pyproject.toml`)
+- Python 3.11 or newer
 - SQLite
 - Standard wireless tooling for putting an interface into monitor mode
+
+`install.sh` was written for **Kali on a Raspberry Pi 5**, run as the `kali` user. It uses `apt` and `sudo`. On another distribution or user, read it first and adapt the package and path steps.
 
 > Monitor mode should be configured in a way that does not disrupt your host's normal connectivity. The operator documentation describes the approach used during development.
 
@@ -131,23 +132,17 @@ A key honest finding from development: naive statistical co-presence clustering 
 
 ## Installation
 
-> The commands below describe the intended flow. Verify exact invocation against `install.sh`, `COMMANDS.md`, and `OPERATOR_MANUAL.md` in this repository, which are authoritative.
-
 ```bash
-# 1. Clone
 git clone https://github.com/dafarusd/sentinel-public.git
 cd sentinel-public
-
-# 2. Run the installer (sets up the environment and dependencies)
 ./install.sh
-
-# 3. Initialize the database from the schema
-sqlite3 sentinel.db < schema.sql   # confirm against OPERATOR_MANUAL.md
-
-# 4. Create your config from the template
 cp config.yaml.example config.yaml
 # then edit config.yaml — see Configuration below
 ```
+
+`install.sh` installs the system packages, builds the virtual environment, creates the data directories, downloads the IEEE OUI database, and applies `schema.sql`. You don't create the database by hand.
+
+`COMMANDS.md` and `OPERATOR_MANUAL.md` go deeper than this page.
 
 To run capture/analysis as background services, install the provided unit files from `systemd/` (review and adjust paths/user for your host before enabling).
 
@@ -171,20 +166,28 @@ Typical things you will set:
 
 ## Usage
 
-> Reconcile these examples with `COMMANDS.md` / `sentinel.sh --help` — that file reflects the real subcommands.
+`sentinel.sh` drives the background services:
 
 ```bash
-# Start a capture session
-./sentinel.sh start          # example — confirm subcommand names
-
-# Check status
-./sentinel.sh status
-
-# Run / refresh analysis over stored observations
-./sentinel.sh analyze
-
-# Stop
+./sentinel.sh start      # start capture + analysis services
+./sentinel.sh status     # what's running
+./sentinel.sh logs       # follow the logs
+./sentinel.sh restart
 ./sentinel.sh stop
+./sentinel.sh selftest   # check the install
+```
+
+The `sentinel` command queries what has been captured:
+
+```bash
+sentinel status                      # database and service summary
+sentinel devices --seen-in 24        # devices seen in the last 24 hours
+sentinel devices --type ble --json
+sentinel device <identifier>         # one device's history
+sentinel alerts --severity high
+sentinel watch                       # live view, polls the database
+sentinel query "SELECT ..."          # raw SQL against the store
+sentinel export -o out.json
 ```
 
 For long-running deployment, prefer the `systemd` services over foreground invocation so capture survives reboots and runs unattended.
@@ -276,4 +279,12 @@ Sentinel is provided for lawful research and education on infrastructure you own
 
 ---
 
-Built by Dafarus — [@Dafarusd on X](https://x.com/Dafarusd)
+Built by Dafarus — local-first software and hardware you own.
+
+Follow the work on X: [@Dafarusd](https://x.com/Dafarusd)
+
+My companies:
+- Steel Valley Burners — [Facebook](https://www.facebook.com/steelvalleyburners)
+- Keephaven — [keephaven.co](https://keephaven.co) · [X](https://x.com/Keephaven) · [Facebook](https://www.facebook.com/profile.php?id=61592155452190)
+
+More work: [gate](https://github.com/dafarusd/gate) · [Sentinel](https://github.com/dafarusd/sentinel-public) · [Agent Ultra](https://github.com/dafarusd/Ultra-Agent-Release) · [EveryVoice](https://github.com/dafarusd/everyvoice) · [Mind Meld](https://github.com/dafarusd/mindmeld) · [monero-swap](https://github.com/dafarusd/monero-swap)
